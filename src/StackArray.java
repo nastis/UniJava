@@ -1,7 +1,5 @@
 
-import java.util.AbstractCollection;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,86 +8,97 @@ import java.util.Iterator;
  * Time: 0:13
  * To change this template use File | Settings | File Templates.
  */
-public class StackArray implements Collection<Integer> {
+public class StackArray extends AbstractCollection<Integer> {
 
-    int count = 100000;
-    Integer[] stack = new Integer[count];
+    private static final int DEFAULT_SIZE = 10;
+    Integer[] stack;
     Integer top = -1;
     //constructor
 
+
+    public StackArray() {
+        stack = new Integer[DEFAULT_SIZE];
+    }
+
+    public StackArray(int initSize) {
+        stack = new Integer[initSize];
+    }
+
     @Override
     public boolean add(Integer integer) {
-        if (top >= count) {
-            return false;
-            //increase stack sizeand return true
+        if (integer==null){
+            throw new NullPointerException("value cannot be null");
+        }
+        if (top == stack.length - 1) {
+            stack=Arrays.copyOf(stack,stack.length*2);
         }
         top++;
         stack[top] = integer;
         return true;
     }
 
+    @Override
     public int size() {
-        return top;
+        return top + 1;
     }
 
+    @Override
     public boolean isEmpty() {
-        if (top == -1)
-            return true;
-        else
-            return false;
+        return top == -1;
     }
 
-
+    @Override
     public boolean contains(Object o) {
+        if (o == null) throw new NullPointerException("value cannot be null");
         if (!(o instanceof Integer)) throw new ClassCastException("wrong type");
-        Integer val = (Integer)o;
+        Integer val = (Integer) o;
         for (int i = 0; i <= top; i++) {
-            if (val.equals(stack[i]))
+            if (val.equals(stack[i])) {
                 return true;
+            }
         }
         return false;
     }
 
-
     @Override
-    public <T> T[] toArray(T[] arr) {
-        if (arr.length > top) throw new NullPointerException();
-        for (int i = 0; i <= top; i++) {
-            arr[i] = stack[i];
-        }
-        return arr;
-        //extends abstract collection
-    }
-
     public boolean equals(Object o) {
         StackArray st = (StackArray) o;
-        int[] array = new int[st.size()];
+        Integer[] array = new Integer[st.size()];
         st.toArray(array);
-        int[] arrst = new int[top];
-        for (int i = 0; i <= top; i++) {
-            arrst[i] = stack[i];
-        }
-        if (array.length == top) {
+        if (array.length == top + 1) {
             int i = 0;
-            while ((arrst[i] == array[i]) && (i <= top))
+            while ((stack[i].equals(array[i])) && (i <= top)){
                 i++;
-            if (i == top)
+            }
+            if (i == top + 1){
                 return true;
+            }
         }
+
+        //  if (array.length != top + 1) return false;
+        //  for (int i = 0; i <= top; i++) {
+//            if (!(stack[i].equals(array[i]))){
+//                return false;
+//            }
+//        }
+
+//        return true;
+
         return false;
     }
 
     @Override
     public boolean remove(Object o) {
         if (!(o instanceof Integer)) return false;
-        int val = (Integer)o;
+        int val = (Integer) o;
         int i = 0;
-        while ((stack[i] != val) && (i <= top))
+        while ((!stack[i].equals(val)) && (i <= top))
             i++;
         if (i == top)
             return false;
         top--;
         return true;
+        //TODO WRONG
     }
 
     @Override
@@ -99,13 +108,12 @@ public class StackArray implements Collection<Integer> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        for (Object o: c) {
-        //check if contains
+        for (Object o : c) {
+            if (!contains(o)){
+                return false;
+            }
         }
-
-
-
-
+        return true;
     }
 
     @Override
@@ -125,16 +133,48 @@ public class StackArray implements Collection<Integer> {
 
     @Override
     public Iterator<Integer> iterator() {
-       //return MyIt object
+        MyIterator iterator = new MyIterator();
+        return iterator;
     }
 
-    private class MyIterator implements Iterator<Integer>
+    private class MyIterator implements Iterator<Integer> {
+        private int cursor = -1;
 
-    @Override
-    public Object[] toArray() {
-        //extends abstract
-        AbstractCollection
+        boolean check = false;
+
+        @Override
+        public boolean hasNext() {
+            if (cursor == top) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public Integer next() {
+            if (hasNext()) {
+                check = true;
+                cursor++;
+                return stack[cursor];
+
+            }
+            throw new NoSuchElementException("there is no such element");
+        }
+
+        @Override
+        public void remove() {
+            if (cursor == -1) {
+                throw new IllegalStateException("iterator is before the first element");
+            }
+            if (!check) {
+                throw new IllegalStateException("You cannot remove twice");
+            }
+            check = false;
+            StackArray.this.remove(stack[cursor]);
+            cursor--;
+        }
     }
+
 
 
 
