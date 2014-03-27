@@ -75,15 +75,6 @@ public class StackArray extends AbstractCollection<Integer> {
             }
         }
 
-        //  if (array.length != top + 1) return false;
-        //  for (int i = 0; i <= top; i++) {
-//            if (!(stack[i].equals(array[i]))){
-//                return false;
-//            }
-//        }
-
-//        return true;
-
         return false;
     }
 
@@ -133,8 +124,8 @@ public class StackArray extends AbstractCollection<Integer> {
 
     @Override
     public Iterator<Integer> iterator() {
-        MyIterator iterator = new MyIterator();
-        return iterator;
+        MyIterator iter = new MyIterator();
+        return iter;
     }
 
     private class MyIterator implements Iterator<Integer> {
