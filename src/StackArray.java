@@ -13,6 +13,7 @@ public class StackArray extends AbstractCollection<Integer> {
     private static final int DEFAULT_SIZE = 10;
     Integer[] stack;
     Integer top = -1;
+    private Object o;
     //constructor
 
 
@@ -62,6 +63,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     @Override
     public boolean equals(Object o) {
+        if (! (o instanceof StackArray)) return false;
         StackArray st = (StackArray) o;
         Integer[] array = new Integer[st.size()];
         st.toArray(array);
@@ -83,13 +85,19 @@ public class StackArray extends AbstractCollection<Integer> {
         if (!(o instanceof Integer)) return false;
         int val = (Integer) o;
         int i = 0;
-        while ((!stack[i].equals(val)) && (i <= top))
+        while ((!stack[i].equals(val)) && (i <= top))  {
             i++;
-        if (i == top)
+        }
+        if (i == top + 1) {
             return false;
-        top--;
-        return true;
-        //TODO WRONG
+        }
+        else {
+            for (int k = i; k < top; k++) {
+                stack[k] = stack[k+1];
+            }
+            top--;
+            return true;
+        }
     }
 
     @Override
