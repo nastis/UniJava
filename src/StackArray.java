@@ -1,5 +1,6 @@
 
 import java.util.*;
+import java.io.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,8 +14,7 @@ public class StackArray extends AbstractCollection<Integer> {
     private static final int DEFAULT_SIZE = 10;
     Integer[] stack;
     Integer top = -1;
-    private Object o;
-    //constructor
+
 
 
     public StackArray() {
@@ -117,17 +117,32 @@ public class StackArray extends AbstractCollection<Integer> {
 
     @Override
     public boolean addAll(Collection<? extends Integer> c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        for (Integer i : c) {
+            if (!add(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        for (Object o : c) {
+            if (!remove(o)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        for (int i = 0; i <= top; i++) {
+            if (!c.contains(stack[i])) {
+                remove(stack[i]);
+            }
+        }
+        return true;
     }
 
     @Override
@@ -175,6 +190,25 @@ public class StackArray extends AbstractCollection<Integer> {
     }
 
 
+    public void push(Integer el) {
+        add(el);
+    }
 
+    public Integer pop() {
+        if (top == -1) throw new EmptyStackException();
+        return top--;
+    }
+
+    public Integer peek() {
+        if (top == -1) throw new EmptyStackException();
+        return top;
+    }
+
+
+    public void print() {
+        for (int i = 0; i <= top; i++) {
+            System.out.println(stack[i]);
+        }
+    }
 
 }
