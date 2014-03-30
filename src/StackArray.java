@@ -12,26 +12,26 @@ import java.io.*;
 public class StackArray extends AbstractCollection<Integer> {
 
     private static final int DEFAULT_SIZE = 10;
-    Integer[] stack;
-    Integer top = -1;
-
+    private Integer[] stack;
+    private Integer top = -1;
 
 
     public StackArray() {
-        stack = new Integer[DEFAULT_SIZE];
+        this(DEFAULT_SIZE);
     }
 
     public StackArray(int initSize) {
+
         stack = new Integer[initSize];
     }
 
     @Override
     public boolean add(Integer integer) {
-        if (integer==null){
+        if (integer == null) {
             throw new NullPointerException("value cannot be null");
         }
         if (top == stack.length - 1) {
-            stack=Arrays.copyOf(stack,stack.length*2);
+            stack = Arrays.copyOf(stack, stack.length * 2);
         }
         top++;
         stack[top] = integer;
@@ -63,16 +63,15 @@ public class StackArray extends AbstractCollection<Integer> {
 
     @Override
     public boolean equals(Object o) {
-        if (! (o instanceof StackArray)) return false;
+        if (!(o instanceof StackArray)) return false;
         StackArray st = (StackArray) o;
-        Integer[] array = new Integer[st.size()];
-        st.toArray(array);
-        if (array.length == top + 1) {
+
+        if (st.stack.length == top + 1) {
             int i = 0;
-            while ((stack[i].equals(array[i])) && (i <= top)){
+            while ((stack[i].equals(st.stack[i])) && (i < top)) {
                 i++;
             }
-            if (i == top + 1){
+            if ((i == top) && (this.stack[top].equals(st.stack[top]))) {
                 return true;
             }
         }
@@ -85,15 +84,14 @@ public class StackArray extends AbstractCollection<Integer> {
         if (!(o instanceof Integer)) return false;
         int val = (Integer) o;
         int i = 0;
-        while ((!stack[i].equals(val)) && (i <= top))  {
+        while ((!stack[i].equals(val)) && (i <= top)) {
             i++;
         }
         if (i == top + 1) {
             return false;
-        }
-        else {
+        } else {
             for (int k = i; k < top; k++) {
-                stack[k] = stack[k+1];
+                stack[k] = stack[k + 1];
             }
             top--;
             return true;
@@ -108,7 +106,7 @@ public class StackArray extends AbstractCollection<Integer> {
     @Override
     public boolean containsAll(Collection<?> c) {
         for (Object o : c) {
-            if (!contains(o)){
+            if (!contains(o)) {
                 return false;
             }
         }
@@ -154,7 +152,7 @@ public class StackArray extends AbstractCollection<Integer> {
     private class MyIterator implements Iterator<Integer> {
         private int cursor = -1;
 
-        boolean check = false;
+        private boolean check = false;
 
         @Override
         public boolean hasNext() {

@@ -22,5 +22,15 @@ public class Check {
         st.remove(5);
         st.print();
         System.out.println("size:" + st.size());
+        StackArray test = new StackArray(2);
+        test.add(10);
+        test.add(3);
+        System.out.println("size:" + test.size());
+        if (st.equals(test)) {
+            System.out.println("equals");
+        }
+        else {
+            System.out.println("not equals");
+        }
     }
 }
