@@ -1,3 +1,5 @@
+import java.io.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Lily
@@ -6,31 +8,67 @@
  * To change this template use File | Settings | File Templates.
  */
 public class Check {
-    public static void main(String[] args) {
+    public enum Command {
+        PUSH, POP, PEEK, SIZE, ISEMPTY, CLEAR
+    }
+    public static void main(String[] args) throws IOException {
         StackArray st = new StackArray();
 
-        st.add(5);
-        st.add(10);
-        st.add(3);
-        st.print();
-        if (st.contains(11)) {
-            System.out.println("yes");
+        String pathin = args[0];
+        String pathout = args[1];
+
+        BufferedReader bufi = null;
+        File input = new File(pathin);
+        bufi = new BufferedReader(new FileReader(input));
+
+        BufferedWriter bufo = null;
+        File output = new File(pathout);
+        bufo = new BufferedWriter(new FileWriter(output));
+
+
+
+
+        String str;
+        String[] array = new String[2];
+        while ((str = bufi.readLine()) != null) {
+            array = str.split(" ");
+            switch (Command.valueOf(array[0])) {
+                case PUSH:
+                    st.push(Integer.parseInt(array[1]));
+                    st.print(bufo);
+                    bufo.newLine();
+                    break;
+                case POP:
+                    int element = st.pop();
+                    bufo.write("Popped element: " + element + "\n");
+                    st.print(bufo);
+                    bufo.newLine();
+                    break;
+                case PEEK:
+                    int elem = st.peek();
+                    bufo.write("Peeked element: " + elem + "\n");
+                    break;
+                case SIZE:
+                    int size = st.size();
+                    bufo.write("Size is " + size + "\n");
+                    break;
+                case CLEAR:
+                    st.clear();
+                case ISEMPTY:
+                    if (st.isEmpty()) {
+                        bufo.write("Stack is empty\n");
+                    } else {
+                        bufo.write("Stack is not empty\n");
+                    }
+                    break;
+                default:
+                    bufo.write("Wrong command" + array[0] + "\n");
+
+            }
         }
-        else {
-            System.out.println("no");
-        }
-        st.remove(5);
-        st.print();
-        System.out.println("size:" + st.size());
-        StackArray test = new StackArray(2);
-        test.add(10);
-        test.add(3);
-        System.out.println("size:" + test.size());
-        if (st.equals(test)) {
-            System.out.println("equals");
-        }
-        else {
-            System.out.println("not equals");
-        }
+
+        bufi.close();
+        bufo.close();
+
     }
 }

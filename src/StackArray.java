@@ -203,9 +203,10 @@ public class StackArray extends AbstractCollection<Integer> {
     }
 
 
-    public void print() {
+    public void print(BufferedWriter buf) throws IOException {
         for (int i = 0; i <= top; i++) {
-            System.out.println(stack[i]);
+            buf.write(stack[i] + "\n");
+//            System.out.println(stack[i]);
         }
     }
 
