@@ -1,3 +1,4 @@
+package stackarray;
 
 import java.util.*;
 import java.io.*;
@@ -9,11 +10,11 @@ import java.io.*;
  * Time: 0:13
  * To change this template use File | Settings | File Templates.
  */
-public class StackArray extends AbstractCollection<Integer> {
+public class StackArray<E> extends AbstractCollection<E> {
 
     private static final int DEFAULT_SIZE = 10;
-    private Integer[] stack;
-    private Integer top = -1;
+    private E[] stack;
+    private int top = -1;
 
     /**
      * Constructor with default initial size
@@ -27,17 +28,18 @@ public class StackArray extends AbstractCollection<Integer> {
      */
     public StackArray(int initSize) {
 
-        stack = new Integer[initSize];
+        stack = (E[]) new Object[initSize];
     }
 
     /**
      * Add integer value to the top of the stack.
+     *
      * @param integer to be added
      * @return true; if there is not enough space, double the ize of stack
      * @throws NullPointerException
      */
     @Override
-    public boolean add(Integer integer) {
+    public boolean add(E integer) {
         if (integer == null) {
             throw new NullPointerException("value cannot be null");
         }
@@ -51,6 +53,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Return number of elements
+     *
      * @return number of elements in stack
      */
     @Override
@@ -60,6 +63,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Check if stack is empty
+     *
      * @return true if stack is empty; false if not
      */
     @Override
@@ -69,6 +73,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Check if stack contains given element
+     *
      * @param o to be checked if it is contained in stack
      * @return true if o is contained in stack; false if not
      * @throws NullPointerException; ClassCastException
@@ -88,6 +93,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Check if given object equals to stack
+     *
      * @param o that is to be compared to stack
      * @return true if stack and o equals; false if not
      */
@@ -111,6 +117,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Remove given object from stack
+     *
      * @param o to be removed from stack
      * @return true if o was removed successfully; false if not, for example, there was not such element
      */
@@ -143,6 +150,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Check if stack contains all elements from given collection
+     *
      * @param c is a collection from where the elements are taken
      * @return true if stack contains all the elements; false if not
      */
@@ -158,12 +166,13 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Add all elements from given collection to the stack
+     *
      * @param c is a collection from where elements are taken
      * @return true if all the elements were added successfully; false if not
      */
     @Override
-    public boolean addAll(Collection<? extends Integer> c) {
-        for (Integer i : c) {
+    public boolean addAll(Collection<? extends E> c) {
+        for (E i : c) {
             if (!add(i)) {
                 return false;
             }
@@ -173,6 +182,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Remove from the stack all the elements from given collection
+     *
      * @param c is the collection from where elements are taken
      * @return true if all the elements were removed successfully; false if not
      */
@@ -188,6 +198,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Retain in stack those elements that are contained in given collcetion
+     *
      * @param c is the collcetion from where elements are taken
      * @return true if all redundant elements were removed successfully; false if not
      */
@@ -203,10 +214,11 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Create new Iterator
+     *
      * @return created Iterator
      */
     @Override
-    public Iterator<Integer> iterator() {
+    public Iterator<E> iterator() {
         MyIterator iter = new MyIterator();
         return iter;
     }
@@ -214,13 +226,14 @@ public class StackArray extends AbstractCollection<Integer> {
     /**
      * Iterator class
      */
-    private class MyIterator implements Iterator<Integer> {
+    private class MyIterator implements Iterator<E> {
         private int cursor = -1;
 
         private boolean check = false;
 
         /**
          * Ckeck if there is next element in the stack
+         *
          * @return true if there is next element; false if not
          */
         @Override
@@ -233,15 +246,16 @@ public class StackArray extends AbstractCollection<Integer> {
 
         /**
          * Check if there is next element and return it
+         *
          * @return next element
          * @throws NoSuchElementException
          */
         @Override
-        public Integer next() {
+        public E next() {
             if (hasNext()) {
                 check = true;
                 cursor++;
-                return stack[cursor];
+                return (E)stack[cursor];
 
             }
             throw new NoSuchElementException("there is no such element");
@@ -249,6 +263,7 @@ public class StackArray extends AbstractCollection<Integer> {
 
         /**
          * Remove element under iterator
+         *
          * @throws IllegalStateException
          */
         @Override
@@ -267,34 +282,38 @@ public class StackArray extends AbstractCollection<Integer> {
 
     /**
      * Add element to stack
+     *
      * @param el to be added
      */
-    public void push(Integer el) {
+    public void push(E el) {
         add(el);
     }
 
     /**
      * Pop the top element of stack
+     *
      * @return top element of stack
      * @throws EmptyStackException
      */
-    public Integer pop() {
+    public E pop() {
         if (top == -1) throw new EmptyStackException();
         return stack[top--];
     }
 
     /**
      * Return top element but not remove it
+     *
      * @return top element of stack
      * @throws EmptyStackException
      */
-    public Integer peek() {
+    public E peek() {
         if (top == -1) throw new EmptyStackException();
         return stack[top];
     }
 
     /**
      * Print stack elements to file
+     *
      * @param buf BufferedWriter to describe the file
      * @throws IOException
      */
